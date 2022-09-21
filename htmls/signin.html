@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+</head>
+<body>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+    </div>
+    {% endfor %}
+
+    <h3>Log In to your account!</h3>
+    <!-- <form id = 'login-form' method="post" action="/signin" onsubmit="isCaptchaValid()" class="mb-2"> -->
+        <!-- {% csrf_token %} -->
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="input_username" name="input_username" placeholder="Enter Your Username" Required>
+        </div>
+        <div class="form-group">
+            <label for="pass1">Password</label>
+            <input type="password" class="form-control" id="input_pass1" name="pass1" placeholder="Enter Your Password" Required>
+        </div>
+        <div class="form-group">
+            <label for="human"> {{x}} {{z}} {{y}}</label>
+            <p style="display: none;" id = 'solution'>{{answer}}</p>
+            <input type="text" class="form-control" id="input_humauth" name="humauth" placeholder="Confirm You Are Not A Robot" Required>
+        </div>
+
+        <form id = 'login-form-js'>
+            {%csrf_token%}
+        </form>
+
+        <button onclick = 'isCaptchaValid()' class="btn btn-primary">Log In</button>
+    <!-- </form> -->
+    <script>
+        function isCaptchaValid() {
+            if (document.getElementById('input_humauth').value == document.getElementById('solution').textContent) {
+                let form = document.getElementById('login-form-js')
+        
+                let username_ = document.createElement('input')
+                username_.name = 'username_'
+                username_.type = 'text'
+                username_.value = document.getElementById('input_username').value
+                form.appendChild(username_)
+ 
+                let pass1 = document.createElement('input')
+                pass1.name = 'pass1_'
+                pass1.type = 'password'
+                pass1.value = document.getElementById('input_pass1').value
+                form.appendChild(pass1)
+
+                let captcha = document.createElement('input')
+                captcha.name = 'captcha_'
+
+                captcha.type = 'text'
+                captcha.value = document.getElementById('input_humauth').value
+                form.appendChild(captcha)
+                form.method = 'post'
+
+                form.action = '/signin'
+
+
+                // <button type="submit" form="form1" value="Submit">Submit</button>
+                submitbutton = document.createElement('button')
+                submitbutton.type = 'submit'
+                submitbutton.form = 'login-form-js'
+                form.style.display = 'none'
+                document.body.appendChild(form);
+                form.submit()
+            }
+            else console.log("Captcha not true")
+        } 
+    </script>
+</body>
+</html>
